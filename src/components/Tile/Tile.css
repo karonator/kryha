@@ -1,0 +1,8 @@
+.tile {
+  align-items: center;
+  border: 1px solid red;
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  transition: 0.3s all;
+}
