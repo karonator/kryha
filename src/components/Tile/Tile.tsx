@@ -1,38 +1,53 @@
 import React, { ReactElement, CSSProperties } from 'react';
 
-import './Tile.css';
+import './Tile.scss';
 import bg from '../../assests/backgrounds/bg-1.jpg';
 
 import { NumToXY } from '../../types';
 
 import { TileProps } from './interfaces';
 
-const Tile = ({ tile, size, move }:TileProps):ReactElement => {
+const Tile = (props: TileProps):ReactElement => {
+  const {
+    tile,
+    size,
+    move,
+    containerWidth
+  } = props;
   const { order, empty, index } = tile;
 
-  const coords = NumToXY(order, size);
-  const backgroundCoords = NumToXY(index, size);
-  const step = 100 / size;
+  const tileStyle = (): CSSProperties => {
+    const coords = NumToXY(order, size);
+    const step = 100 / size;
 
-  const tileStyle: CSSProperties = {
-    width: `${step}%`,
-    height: `${step}%`,
-    left: `${coords.x * step}%`,
-    top: `${coords.y * step}%`,
+    return {
+      width: `${step}%`,
+      height: `${step}%`,
+      left: `${coords.x * step}%`,
+      top: `${coords.y * step}%`
+    };
+  };
 
-    backgroundImage: !empty ? `url(${bg})` : '',
-    backgroundSize: 500,
-    backgroundPositionX: `-${(backgroundCoords.x / size) * 500}px`,
-    backgroundPositionY: `-${(backgroundCoords.y / size) * 500}px`
+  const backgroundStyles = (): CSSProperties | null => {
+    const backgroundCoords = NumToXY(index, size);
+    if (containerWidth) {
+      return {
+        backgroundImage: !empty ? `url(${bg})` : '',
+        backgroundSize: containerWidth,
+        backgroundPositionX: `-${(backgroundCoords.x / size) * containerWidth}px`,
+        backgroundPositionY: `-${(backgroundCoords.y / size) * containerWidth}px`
+      };
+    }
+    return null;
   };
 
   return (
     <div
-      className={`tile ${empty && 'tile-empty'}`}
-      style={tileStyle}
+      className={`tile ${empty && 'empty'}`}
+      style={{ ...tileStyle(), ...backgroundStyles() }}
       onClick={() => move(order)}
     >
-      {!empty && index}
+      {!empty && index + 1}
     </div>
   );
 };
