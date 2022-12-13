@@ -19,5 +19,31 @@
         margin: 0;
       }
     }
+
+    .controls {
+      display: flex;
+
+      button {
+        align-items: center;
+        background: unset;
+        border: 0;
+        cursor: pointer;
+        display: flex;
+        height: 32px;
+        justify-content: center;
+        margin-left: 10px;
+        transition: 0.3s all;
+        width: 32px;
+
+        img {
+          height: 24px; 
+          width: 24px;
+        }
+
+        &:disabled {
+          opacity: 0.3;
+        }
+      }
+    }
   }
 }

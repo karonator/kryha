@@ -23,16 +23,17 @@ const App = (): ReactElement => {
   const [gameData, setGameData] = useState<IGame>({
     size: 3,
     moves: 0,
-    wins: 0
+    wins: 0,
+    imageMode: true
   });
-  const { size } = gameData;
+  const { size, imageMode } = gameData;
 
   const container = useRef<HTMLDivElement>(null);
   const containerWidth = useWidth(container);
 
   useEffect(() => {
     setField(genTiles(size));
-  }, []);
+  }, [size]);
 
   const move = (order: number): boolean => {
     const update = performMove(field, order, size);
@@ -46,15 +47,16 @@ const App = (): ReactElement => {
 
   return (
     <>
-      <GameBar gameData={gameData} />
+      <GameBar gameData={gameData} setGameData={setGameData} />
       <div className="tiles" ref={container}>
         {field.map((tile) => (
           <Tile
             key={`tile.-${tile.index}`}
             tile={tile}
-            size={size}
+            fieldSize={size}
             move={move}
             containerWidth={containerWidth}
+            imageMode={imageMode}
           />
         ))}
       </div>
