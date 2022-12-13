@@ -5,6 +5,8 @@ import React, {
   useRef
 } from 'react';
 
+import { toast } from 'react-toastify';
+
 import './App.css';
 
 import { ITileField, IGame } from '../types';
@@ -15,7 +17,8 @@ import Tile from '../components/Tile';
 
 import {
   genTiles,
-  performMove
+  performMove,
+  winCheck
 } from '../controllers/game';
 
 const App = (): ReactElement => {
@@ -26,7 +29,12 @@ const App = (): ReactElement => {
     wins: 0,
     imageMode: true
   });
-  const { size, imageMode } = gameData;
+  const {
+    size,
+    moves,
+    wins,
+    imageMode
+  } = gameData;
 
   const container = useRef<HTMLDivElement>(null);
   const containerWidth = useWidth(container);
@@ -35,11 +43,19 @@ const App = (): ReactElement => {
     setField(genTiles(size));
   }, [size]);
 
+  useEffect(() => {
+    if (winCheck(field)) {
+      toast('Congratilations! You\'ve completed the level!');
+      setGameData({ ...gameData, moves: 0, wins: wins + 1 });
+      setField(genTiles(size));
+    }
+  }, [field]);
+
   const move = (order: number): boolean => {
     const update = performMove(field, order, size);
     if (update) {
       setField(update);
-      setGameData({ ...gameData, moves: gameData.moves + 1 });
+      setGameData({ ...gameData, moves: moves + 1 });
       return true;
     }
     return false;

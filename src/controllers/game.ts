@@ -17,7 +17,7 @@ export const genTiles = (size: number): ITileField => {
   return tiles;
 };
 
-export const performMove = (field:ITileField, order: number, size: number): ITileField | null => {
+export const performMove = (field: ITileField, order: number, size: number): ITileField | null => {
   const { x, y } = NumToXY(order, size);
   const empty = field.find((tile) => tile.empty);
   if (empty) {
@@ -46,4 +46,16 @@ export const performMove = (field:ITileField, order: number, size: number): ITil
     }
   }
   return null;
+};
+
+export const winCheck = (field: ITileField): boolean => {
+  if (field.length === 0) {
+    return false;
+  }
+  for (let i = 0; i < field.length; i += 1) {
+    if (field[i].empty === false && field[i].index !== field[i].order) {
+      return false;
+    }
+  }
+  return true;
 };

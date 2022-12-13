@@ -1,7 +1,7 @@
 import React, { ReactElement, CSSProperties } from 'react';
 
 import './Tile.scss';
-import bg from '../../assests/backgrounds/bg-1.jpg';
+import bg from '../../assests/backgrounds/bg.jpg';
 
 import { NumToXY } from '../../types';
 
