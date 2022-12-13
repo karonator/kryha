@@ -39,7 +39,7 @@ const GameBar = ({ gameData, setGameData }:GameBarProps):ReactElement => {
             disabled={gameData.size === 5}
             onClick={() => setGameData({ ...gameData, size: gameData.size + 1, moves: 0 })}
           >
-            <img src={chevron_up} alt="Change mode" />
+            <img src={chevron_up} alt="Increase size" />
           </button>
           <button
             type="button"
@@ -47,7 +47,7 @@ const GameBar = ({ gameData, setGameData }:GameBarProps):ReactElement => {
             disabled={gameData.size === 2}
             onClick={() => setGameData({ ...gameData, size: gameData.size - 1, moves: 0 })}
           >
-            <img src={chevron_down} alt="Change mode" />
+            <img src={chevron_down} alt="Decrease size" />
           </button>
         </div>
       </div>
