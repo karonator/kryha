@@ -1,8 +1,5 @@
-.App {
-  text-align: center;
-}
-
 .tiles {
+  background-color: #2f3640;
   height: 500px;
   position: relative;
   width: 500px;

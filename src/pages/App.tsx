@@ -9,82 +9,51 @@ import './App.css';
 import GameBar from '../components/GameBar/GameBar';
 import Tile from '../components/Tile';
 
-import { NumToXY } from '../utils/coords';
-import { ITile } from '../types';
+import { ITileField, NumToXY, IGame } from '../types';
 
-type ITileField = Array<ITile>;
+import {
+  genTiles,
+  performMove
+} from '../controllers/game';
 
 const App = (): ReactElement => {
   const [field, setField] = useState<ITileField>([]);
-  const [fieldSize, setFieldSize] = useState<number>(10);
+  const [gameData, setGameData] = useState<IGame>({
+    size: 3,
+    moves: 0,
+    wins: 0
+  });
 
-  const genTiles = (size: number): ITileField => {
-    const orders = Array.from(Array(size * size).keys())
-      .map((order) => ({ order, sort: Math.random() }))
-      .sort((a, b) => a.sort - b.sort)
-      .map(({ order }) => order);
+  const { size } = gameData;
 
-    const tiles = orders.map((order, index) => ({
-      index,
-      order,
-      empty: false
-    }));
-
-    tiles[Math.floor(Math.random() * tiles.length)].empty = true;
-
-    return tiles;
-  };
+  useEffect(() => {
+    setField(genTiles(size));
+  }, []);
 
   const move = (order: number): boolean => {
-    const { x, y } = NumToXY(order, fieldSize);
-    const empty = field.find((tile) => tile.empty);
-    if (empty) {
-      const emptyCoords = NumToXY(empty.order, fieldSize);
-      if (
-        (((x + 1 === emptyCoords.x) || (x - 1 === emptyCoords.x)) && y === emptyCoords.y)
-        || (((y + 1 === emptyCoords.y) || (y - 1 === emptyCoords.y)) && x === emptyCoords.x)
-      ) {
-        const updatedTiles = field.map((tile) => {
-          switch (tile.order) {
-            case empty.order:
-              return {
-                ...tile,
-                order
-              };
-            case order:
-              return {
-                ...tile,
-                order: empty.order
-              };
-            default:
-              return tile;
-          }
-        });
-        setField(updatedTiles);
-        console.log('yes!');
-      }
+    const update = performMove(field, order, size);
+    if (update) {
+      setField(update);
+      setGameData({ ...gameData, moves: gameData.moves + 1 });
+      return true;
     }
     return false;
   };
 
-  useEffect(() => {
-    setField(genTiles(fieldSize));
-  }, []);
-
   return (
-    <div className="App">
-      <GameBar />
+    <>
+      <GameBar gameData={gameData} />
       <div className="tiles">
         {field.map((tile) => (
           <Tile
             key={`tile.-${tile.index}`}
             tile={tile}
-            size={fieldSize}
+            size={size}
             move={move}
           />
         ))}
       </div>
-    </div>
+    </>
   );
 };
 

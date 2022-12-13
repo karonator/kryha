@@ -3,3 +3,5 @@ export interface ITile {
   order: number;
   empty: boolean;
 }
+
+export type ITileField = Array<ITile>;
